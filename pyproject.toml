@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "epsilon-database"
+version = "0.1.0"
+description = "epsilon-database is the dedicated repository for managing all database-related components of the Epsilon project"
+authors = ["Gowrisankar <gowrisankar2396@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.14.1"
+sqlalchemy = "^2.0.38"
+psycopg2 = "^2.9.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
