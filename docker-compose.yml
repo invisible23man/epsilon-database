@@ -2,12 +2,41 @@ version: "3.8"
 
 services:
   postgres:
-    image: "postgres:latest"
-    container_name: epsilon-db
+    image: postgres:15
+    container_name: epsilon-postgres
     restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: epsilon_db
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: epsilon_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:  # ✅ Ensures PostgreSQL is ready before running migrations
+      test: ["CMD", "pg_isready", "-U", "myuser", "-d", "epsilon_db"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
+  epsilon-database:
+    build: .
+    container_name: epsilon-database
+    depends_on:
+      postgres:
+        condition: service_healthy  # ✅ Ensures PostgreSQL is fully ready
+    env_file:
+      - .env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+      DB_NAME: epsilon_db
+    command: >
+      sh -c "poetry run alembic upgrade head && tail -f /dev/null"
+    volumes:
+      - .:/app"
+
+volumes:
+  postgres_data:

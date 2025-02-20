@@ -29,7 +29,13 @@ from models.trends import TrendData  # Add all your models here
 target_metadata = Base.metadata
 
 # ✅ Load database URL dynamically
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5432/epsilon_db")
+DB_HOST=os.getenv("DB_HOST","postgres")
+DB_PORT=os.getenv("DB_PORT","5432")
+DB_USER=os.getenv("DB_USER","myuser")
+DB_PASSWORD=os.getenv("DB_PASSWORD","mypassword")
+DB_NAME=os.getenv("DB_NAME","epsilon_db")
+DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
 config = context.config
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
@@ -89,3 +95,4 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
