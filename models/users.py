@@ -1,0 +1,10 @@
+from sqlalchemy import Column, Integer, String, DateTime
+from .base import Base
+import datetime
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)

@@ -17,25 +17,18 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-# target_metadata = None
-
 # ✅ Import models
 from models.base import Base
-from models.trends import TrendData  # Add all your models here
+from models.trends import RedditPost
+from models.insights import Insight
+from models.users import User
 
 # ✅ Set metadata
 target_metadata = Base.metadata
 
 # ✅ Load database URL dynamically
-DB_HOST=os.getenv("DB_HOST","postgres")
-DB_PORT=os.getenv("DB_PORT","5432")
-DB_USER=os.getenv("DB_USER","myuser")
-DB_PASSWORD=os.getenv("DB_PASSWORD","mypassword")
-DB_NAME=os.getenv("DB_NAME","epsilon_db")
-DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
+from config import CONFIG
+DATABASE_URL = f"postgresql://{CONFIG.DB_USER}:{CONFIG.DB_PASSWORD}@{CONFIG.DB_HOST}:{CONFIG.DB_PORT}/{CONFIG.DB_NAME}"
 config = context.config
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
